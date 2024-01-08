@@ -17,6 +17,10 @@ contract HUSTToken is Ownable, IERC20 {
     string public constant symbol = 'HUST';                 // TODO: Give your token a symbol
     string public constant name = 'HUSTToken';                   // TODO: Give your token a name
 
+    uint private _totalSupply = 0;                          // TODO: Decide on a value
+
+    bool public minting_disabled = false;                   // TODO: Decide on a value
+
     constructor() ERC20(name, symbol) {}
 
     // ============================================================
@@ -38,6 +42,13 @@ contract HUSTToken is Ownable, IERC20 {
         onlyOwner
     {
         /******* TODO: Implement this function *******/
+        require(msg.sender != address(0), "ERC20: mint to the zero address");
+        require(minting_disabled == false, "Minting is disabled");
+
+        _totalSupply += amount;
+        _balances[msg.sender] += amount;
+        emit Transfer(address(0), msg.sender, amount);
+        
     }
 
     /**
@@ -53,4 +64,5 @@ contract HUSTToken is Ownable, IERC20 {
         onlyOwner
     {
         /******* TODO: Implement this function *******/
+        minting_disabled = true;
     }

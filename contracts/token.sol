@@ -18,9 +18,11 @@ contract HUSTToken is Ownable, IERC20 {
     string public constant symbol = 'HUST';                 // TODO: Give your token a symbol
     string public constant name = 'HUSTToken';                   // TODO: Give your token a name
 
-    uint private _totalSupply = 0;                          // TODO: Decide on a value
+    uint private _totalSupply = 0;
 
-    bool public minting_disabled = false;                   // TODO: Decide on a value
+    mapping(address => uint) private _balances;     
+
+    bool public minting_disabled = false;
 
     constructor() ERC20(name, symbol) {}
 

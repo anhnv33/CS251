@@ -7,7 +7,8 @@ pragma solidity ^0.8.0;
 // Please check out the OpenZeppelin contracts for ERC20 tokens!
 // Links can be found in the the respective solidity files
 import "../interfaces/IERC20.sol";
-import '../interfaces/erc20_interface.sol';
+// import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import '../libraries/erc20.sol';
 import '../libraries/ownable.sol';
 
 
@@ -66,3 +67,4 @@ contract HUSTToken is Ownable, IERC20 {
         /******* TODO: Implement this function *******/
         minting_disabled = true;
     }
+}

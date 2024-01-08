@@ -20,7 +20,9 @@ contract HUSTToken is Ownable, IERC20 {
 
     uint private _totalSupply = 0;
 
-    mapping(address => uint) private _balances;     
+    mapping(address => uint) private _balances;   
+
+    mapping (address => mapping (address => uint256)) private _allowances;
 
     bool public minting_disabled = false;
 
@@ -68,5 +70,141 @@ contract HUSTToken is Ownable, IERC20 {
     {
         /******* TODO: Implement this function *******/
         minting_disabled = true;
+    }
+
+    /**
+     * Returns the total supply of the token.
+     * 
+     * NOTE: This is a required override by OpenZeppelin's ERC20 contract.
+     * 
+     * Requirements:
+     *  - there are no requirements for this function
+     *  - you can change the inputs or the scope of your function, as needed
+     */
+    function totalSupply() 
+        external 
+        view 
+        override 
+        returns (uint256)
+    {
+        return _totalSupply;
+    }
+
+    /**
+     * Returns the account balance of another account with address `owner`.
+     * 
+     * NOTE: This is a required override by OpenZeppelin's ERC20 contract.
+     * 
+     * Requirements:
+     *  - there are no requirements for this function
+     *  - you can change the inputs or the scope of your function, as needed
+     */
+    function balanceOf(address owner) 
+        external 
+        view 
+        override 
+        returns (uint256)
+    {
+        return _balances[owner];
+    }
+
+    /**
+     * Transfers `amount` tokens from the caller's account to `recipient`.
+     * 
+     * NOTE: This is a required override by OpenZeppelin's ERC20 contract.
+     * 
+     * Emits a {Transfer} event.
+     * 
+     * Requirements:
+     *  - `recipient` cannot be the zero address
+     *  - the caller must have a balance of at least `amount`
+     *  - you can change the inputs or the scope of your function, as needed
+     */
+    function transfer(address recipient, uint256 amount) 
+        external 
+        override 
+        returns (bool)
+    {
+        require(recipient != address(0), "ERC20: transfer to the zero address");
+        require(_balances[msg.sender] >= amount, "ERC20: transfer amount exceeds balance");
+
+        _balances[msg.sender] -= amount;
+        _balances[recipient] += amount;
+        emit Transfer(msg.sender, recipient, amount);
+
+        return true;
+    }
+
+    /**
+     * Returns the remaining number of tokens that `spender` will be
+     * allowed to spend on behalf of `owner` through {transferFrom}. 
+     * This is zero by default.
+     * 
+     * This value changes when {approve} or {transferFrom} are called.
+     * 
+     * NOTE: This is a required override by OpenZeppelin's ERC20 contract.
+     * 
+     * Requirements:
+     *  - there are no requirements for this function
+     *  - you can change the inputs or the scope of your function, as needed
+     */
+    function allowance(address owner, address spender) external view override returns (uint256) {
+        return _allowances[owner][spender];
+    }  
+
+    /**
+     * Sets `amount` as the allowance of `spender` over the caller's tokens.
+     * 
+     * Emits an {Approval} event.
+     * 
+     * NOTE: This is a required override by OpenZeppelin's ERC20 contract.
+     * 
+     * Requirements:
+     *  - `spender` cannot be the zero address
+     *  - the caller must have a balance of at least `amount`
+     *  - you can change the inputs or the scope of your function, as needed
+     */
+    function approve(address spender, uint256 amount) 
+        external 
+        override 
+        returns (bool)
+    {
+        require(spender != address(0), "ERC20: approve to the zero address");
+        require(_balances[msg.sender] >= amount, "ERC20: approve amount exceeds balance");
+
+        _allowances[msg.sender][spender] = amount;
+        emit Approval(msg.sender, spender, amount);
+
+        return true;
+    }
+
+    /**
+     * Moves `amount` tokens from `sender` to `recipient` using the allowance mechanism. 
+     * `amount` is then deducted from the caller's allowance.
+     * 
+     * Emits a {Transfer} event.
+     * 
+     * Requirements:
+     *  - `sender` and `recipient` cannot be the zero address
+     *  - `sender` must have a balance of at least `amount`
+     *  - the caller must have allowance for `sender`'s tokens of at least `amount`
+     *  - you can change the inputs or the scope of your function, as needed
+     */
+    function transferFrom(address sender, address recipient, uint256 amount) 
+        external 
+        override 
+        returns (bool)
+    {
+        require(sender != address(0), "ERC20: transfer from the zero address");
+        require(recipient != address(0), "ERC20: transfer to the zero address");
+        require(_balances[sender] >= amount, "ERC20: transfer amount exceeds balance");
+        require(_allowances[sender][msg.sender] >= amount, "ERC20: transfer amount exceeds allowance");
+
+        _balances[sender] -= amount;
+        _balances[recipient] += amount;
+        _allowances[sender][msg.sender] -= amount;
+        emit Transfer(sender, recipient, amount);
+
+        return true;
     }
 }

@@ -15,8 +15,8 @@ import '../libraries/ownable.sol';
 // Your token contract
 // TODO: Replace "Token" with your token name!
 contract HUSTToken is Ownable, IERC20 {
-    string public constant symbol = 'HUST';                 // TODO: Give your token a symbol
-    string public constant name = 'HUSTToken';                   // TODO: Give your token a name
+    string private constant symbol = 'HUST';                 // TODO: Give your token a symbol
+    string private constant name = 'HUSTToken';                   // TODO: Give your token a name
 
     uint private _totalSupply = 0;
 
@@ -24,13 +24,21 @@ contract HUSTToken is Ownable, IERC20 {
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
-    bool public minting_disabled = false;
+    bool private minting_disabled = false;
 
-    constructor() ERC20(name, symbol) {}
+    // constructor(string memory name_, string memory symbol_) {
+    //     name = name_;
+    //     symbol = symbol_;
+    // }
 
     // ============================================================
     //                    FUNCTIONS TO IMPLEMENT
     // ============================================================
+
+
+    function decimals() public view virtual returns (uint8) {
+        return 18;
+    }
 
     /**
      * Creates `amount` tokens, increasing the total supply.
@@ -50,8 +58,8 @@ contract HUSTToken is Ownable, IERC20 {
         require(msg.sender != address(0), "ERC20: mint to the zero address");
         require(minting_disabled == false, "Minting is disabled");
 
-        _totalSupply += amount;
-        _balances[msg.sender] += amount;
+        _totalSupply += amount / 10 ** decimals();
+        _balances[msg.sender] += amount / 10 ** decimals();
         emit Transfer(address(0), msg.sender, amount);
         
     }

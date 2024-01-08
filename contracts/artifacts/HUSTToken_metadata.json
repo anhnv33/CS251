@@ -1,0 +1,311 @@
+{
+	"compiler": {
+		"version": "0.8.0+commit.c7dfd78e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"name": "Approval",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"name": "Transfer",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "_disable_mint",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "_mint",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					}
+				],
+				"name": "allowance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "approve",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "balanceOf",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "decimals",
+				"outputs": [
+					{
+						"internalType": "uint8",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalSupply",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "transfer",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "transferFrom",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"_disable_mint()": {
+					"notice": "Disables the ability to mint tokens in the future. Requirements:  - only the owner of this contract can disable minting  - once you disable minting, you should never be able to mint ever again. never.  - you can change the inputs or the scope of your function, as needed"
+				},
+				"_mint(uint256)": {
+					"notice": "Creates `amount` tokens, increasing the total supply. Emits a {Transfer} event with `from` set to the zero address (the \"Black Hole\"). Requirements:  - only the owner of this contract can mint new tokens  - the account who recieves the minted tokens cannot be the zero address  - you can change the inputs or the scope of your function, as needed"
+				},
+				"allowance(address,address)": {
+					"notice": "Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}.  This is zero by default.  This value changes when {approve} or {transferFrom} are called.  NOTE: This is a required override by OpenZeppelin's ERC20 contract.  Requirements:  - there are no requirements for this function  - you can change the inputs or the scope of your function, as needed"
+				},
+				"approve(address,uint256)": {
+					"notice": "Sets `amount` as the allowance of `spender` over the caller's tokens.  Emits an {Approval} event.  NOTE: This is a required override by OpenZeppelin's ERC20 contract.  Requirements:  - `spender` cannot be the zero address  - the caller must have a balance of at least `amount`  - you can change the inputs or the scope of your function, as needed"
+				},
+				"balanceOf(address)": {
+					"notice": "Returns the account balance of another account with address `owner`.  NOTE: This is a required override by OpenZeppelin's ERC20 contract.  Requirements:  - there are no requirements for this function  - you can change the inputs or the scope of your function, as needed"
+				},
+				"totalSupply()": {
+					"notice": "Returns the total supply of the token.  NOTE: This is a required override by OpenZeppelin's ERC20 contract.  Requirements:  - there are no requirements for this function  - you can change the inputs or the scope of your function, as needed"
+				},
+				"transfer(address,uint256)": {
+					"notice": "Transfers `amount` tokens from the caller's account to `recipient`.  NOTE: This is a required override by OpenZeppelin's ERC20 contract.  Emits a {Transfer} event.  Requirements:  - `recipient` cannot be the zero address  - the caller must have a balance of at least `amount`  - you can change the inputs or the scope of your function, as needed"
+				},
+				"transferFrom(address,address,uint256)": {
+					"notice": "Moves `amount` tokens from `sender` to `recipient` using the allowance mechanism.  `amount` is then deducted from the caller's allowance.  Emits a {Transfer} event.  Requirements:  - `sender` and `recipient` cannot be the zero address  - `sender` must have a balance of at least `amount`  - the caller must have allowance for `sender`'s tokens of at least `amount`  - you can change the inputs or the scope of your function, as needed"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/token.sol": "HUSTToken"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/token.sol": {
+			"keccak256": "0x56052b1664d7eda494a103e35b6bbb123071828252907c8fff53b630ea8b5414",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://9ec6751e176b1890048c59bdb9d86b09386903fa830775718297d785f68bc00c",
+				"dweb:/ipfs/QmWPvDCwiEksi5AUQk7ppuvWYw71XzuyoMfEm2iwDztH5z"
+			]
+		},
+		"interfaces/IERC20.sol": {
+			"keccak256": "0x6ba702bf7bb3ff99b585fd812e6234a6896dc9151500eb9bb58716c14bcb69f4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c6b8cfe345248cdd9956c5085dfb7209387a129e6aa207a09056d9614d87ee49",
+				"dweb:/ipfs/QmXPA8HVT2T449p3bmZYaPqEJgxHNNFXrz3zqFBfn9D7re"
+			]
+		},
+		"libraries/erc20.sol": {
+			"keccak256": "0x3b27826867857dc564ab39c2a8411d85709453af6564476d415df33277829d0c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://eb86161b75521c5c58771c7dd947939d6eda426efbb99cb61e107795da7f0641",
+				"dweb:/ipfs/QmfQCDcrgrWTucii99DciHXJNGwJsiJP9NoN17dhSSSETH"
+			]
+		},
+		"libraries/ownable.sol": {
+			"keccak256": "0x2ddbe12210096a4cdd886baa8abb601e0272b6b0165835c9b4dedfe06ee74edc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d9dbb65899c715b22da82a643d3792480feb01b0bafec4b3cd1685272e2aff15",
+				"dweb:/ipfs/QmTieB57T1PokeEeL4d5ttbeN1aNWiTNYLRbDVe8gD9na2"
+			]
+		}
+	},
+	"version": 1
+}

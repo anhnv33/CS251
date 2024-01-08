@@ -13,9 +13,9 @@ import '../libraries/ownable.sol';
 
 // Your token contract
 // TODO: Replace "Token" with your token name!
-contract Token is Ownable, IERC20 {
-    string public constant symbol = '';                 // TODO: Give your token a symbol
-    string public constant name = '';                   // TODO: Give your token a name
+contract HUSTToken is Ownable, IERC20 {
+    string public constant symbol = 'HUST';                 // TODO: Give your token a symbol
+    string public constant name = 'HUSTToken';                   // TODO: Give your token a name
 
     constructor() ERC20(name, symbol) {}
 

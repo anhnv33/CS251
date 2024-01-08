@@ -7,8 +7,8 @@ const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
 
 const exchange_name = 'Your Exchange Name'; // TODO: fill in the name of your exchange
 
-const token_name = 'YourToken';             // TODO: replace with name of your token
-const token_symbol = 'TOKEN';               // TODO: replace with symbol for your token
+const token_name = 'HUSTToken';             // TODO: replace with name of your token
+const token_symbol = 'HUST';               // TODO: replace with symbol for your token
 
 
 // =============================================================================

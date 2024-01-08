@@ -17,7 +17,7 @@ contract TokenExchange is Ownable {
     address public admin;
 
     address tokenAddr;                              // TODO: Paste token contract address here.
-    Token private token = Token(tokenAddr);         // TODO: Replace "Token" with your token class.             
+    HUSTToken private token = HUSTToken(tokenAddr);         // TODO: Replace "Token" with your token class.             
 
     // Liquidity pool for the exchange
     uint public token_reserves = 0;

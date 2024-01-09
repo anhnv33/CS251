@@ -68,7 +68,7 @@ contract TokenExchange is Ownable {
         token.transferFrom(msg.sender, address(this), amountTokens);
         eth_reserves = msg.value;
         token_reserves = amountTokens;
-        k = eth_reserves.mul(token_reserves);
+        k = eth_reserves * token_reserves;
     }
 
     // ============================================================
@@ -279,7 +279,7 @@ contract TokenExchange is Ownable {
      * Checks for Math.abs(token_reserves * eth_reserves - k) < (token_reserves + eth_reserves + 1));
      * to account for the small decimal errors during uint division rounding.
      */
-    function _checkRounding() private view {
+    function _checkRounding() private {
         uint check = token_reserves * eth_reserves;
         if (check >= k) {
             check = check - k;

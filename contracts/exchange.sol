@@ -16,7 +16,7 @@ import '../libraries/ownable.sol';
 contract TokenExchange is Ownable {
     address public admin;
 
-    address tokenAddr;                              // TODO: Paste token contract address here.
+    address tokenAddr = 0x6fd36D7C9d036Aa5Ab61890dB1E55C1E7554A546;                              // TODO: Paste token contract address here.
     HUSTToken private token = HUSTToken(tokenAddr);         // TODO: Replace "Token" with your token class.             
 
     // Liquidity pool for the exchange

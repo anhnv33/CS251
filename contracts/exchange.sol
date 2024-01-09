@@ -16,7 +16,7 @@ import '../libraries/ownable.sol';
 contract TokenExchange is Ownable {
     address public admin;
 
-    address tokenAddr;                              // TODO: Paste token contract address here.
+    address tokenAddr = 0x6fd36D7C9d036Aa5Ab61890dB1E55C1E7554A546;                              // TODO: Paste token contract address here.
     HUSTToken private token = HUSTToken(tokenAddr);         // TODO: Replace "Token" with your token class.             
 
     // Liquidity pool for the exchange
@@ -68,7 +68,7 @@ contract TokenExchange is Ownable {
         token.transferFrom(msg.sender, address(this), amountTokens);
         eth_reserves = msg.value;
         token_reserves = amountTokens;
-        k = eth_reserves.mul(token_reserves);
+        k = eth_reserves * token_reserves;
     }
 
     // ============================================================
@@ -279,7 +279,7 @@ contract TokenExchange is Ownable {
      * Checks for Math.abs(token_reserves * eth_reserves - k) < (token_reserves + eth_reserves + 1));
      * to account for the small decimal errors during uint division rounding.
      */
-    function _checkRounding() private view {
+    function _checkRounding() private {
         uint check = token_reserves * eth_reserves;
         if (check >= k) {
             check = check - k;

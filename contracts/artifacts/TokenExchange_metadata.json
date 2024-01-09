@@ -1,0 +1,290 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "AddLiquidity",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "RemoveLiquidity",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "addLiquidity",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "admin",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountETH",
+						"type": "uint256"
+					}
+				],
+				"name": "amountETHGivenToken",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountToken",
+						"type": "uint256"
+					}
+				],
+				"name": "amountTokenGivenETH",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountTokens",
+						"type": "uint256"
+					}
+				],
+				"name": "createPool",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "eth_reserves",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "k",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "removeAllLiquidity",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountETH",
+						"type": "uint256"
+					}
+				],
+				"name": "removeLiquidity",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "swapETHForTokens",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountTokens",
+						"type": "uint256"
+					}
+				],
+				"name": "swapTokensForETH",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "token_reserves",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"addLiquidity()": {
+					"notice": "Adds liquidity given a supply of ETH (sent to the contract as msg.value). Calculates the liquidity to be added based on what was sent in and the prices. If the caller possesses insufficient tokens to equal the ETH sent, then the transaction must fail. A successful transaction should update the state of the contract, including the new constant product k, and then Emit an AddLiquidity event. NOTE: You can change the inputs, or the scope of your function, as needed."
+				},
+				"createPool(uint256)": {
+					"notice": "Initializes a liquidity pool between your token and ETH.  This is a payable function which means you can send in ETH as a quasi-parameter. In this case, the amount of eth sent to the pool will be in msg.value and the number of tokens will be amountTokens. Requirements:  - the liquidity pool should be empty to start  - the sender should send positive values for each"
+				},
+				"removeAllLiquidity()": {
+					"notice": "Removes all liquidity that the sender is entitled to withdraw. Calculate the maximum amount of liquidity that the sender is entitled to withdraw and then calls removeLiquidity() to remove that amount of liquidity from the pool. NOTE: You can change the inputs, or the scope of your function, as needed."
+				},
+				"removeLiquidity(uint256)": {
+					"notice": "Removes liquidity given the desired amount of ETH to remove. Calculates the amount of your tokens that should be also removed. If the caller is not entitled to remove the desired amount of liquidity, the transaction should fail. A successful transaction should update the state of the contract, including the new constant product k, transfer the ETH and Token to the sender and then Emit an RemoveLiquidity event. NOTE: You can change the inputs, or the scope of your function, as needed."
+				},
+				"swapETHForTokens()": {
+					"notice": "Swaps msg.value ETH in exchange for your tokens. Calculates the amount of tokens that should be swapped in order to keep the constant product property, and transfers that number of tokens to the sender. If performing the swap would exhaust the total supply of tokens inside the exchange, the transaction must fail. Part 4 – Expand the function to take in additional parameters as needed. If the          exchange rate is greater than the slippage limit, the swap should fail. Part 5 – Only exchange amountTokens minus the fee taken out for liquidity providers          and keep track of the liquidity fees to be added back into the pool. NOTE: You can change the inputs, or the scope of your function, as needed."
+				},
+				"swapTokensForETH(uint256)": {
+					"notice": "Swaps amountTokens of Token in exchange for ETH. Calculates the amount of ETH that should be swapped in order to keep the constant product property, and transfers that amount of ETH to the provider. If the caller has insufficient tokens, the transaction should fail. If performing the swap would exhaust the total supply of ETH inside the exchange, the transaction must fail. Part 4 – Expand the function to take in additional parameters as needed. If the          exchange rate is greater than the slippage limit, the swap should fail. Part 5 – Only exchange amountTokens minus the fee taken out for liquidity providers          and keep track of the liquidity fees to be added back into the pool. NOTE: You can change the inputs, or the scope of your function, as needed."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/exchange.sol": "TokenExchange"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/exchange.sol": {
+			"keccak256": "0xed1183120d0be067ceb8bdeea3e9fc241c6534085ca369ffff8273b4d431b003",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://c5e185baaa2fd91327dbcdd25a877b336af76aa55519da374efaefbffd4d7e83",
+				"dweb:/ipfs/QmWtXhPAG8Cc6h8bzXFgrVCDUus7dR2EAFgD8QVqp4BzsU"
+			]
+		},
+		"contracts/token.sol": {
+			"keccak256": "0x56052b1664d7eda494a103e35b6bbb123071828252907c8fff53b630ea8b5414",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://9ec6751e176b1890048c59bdb9d86b09386903fa830775718297d785f68bc00c",
+				"dweb:/ipfs/QmWPvDCwiEksi5AUQk7ppuvWYw71XzuyoMfEm2iwDztH5z"
+			]
+		},
+		"interfaces/IERC20.sol": {
+			"keccak256": "0x6ba702bf7bb3ff99b585fd812e6234a6896dc9151500eb9bb58716c14bcb69f4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c6b8cfe345248cdd9956c5085dfb7209387a129e6aa207a09056d9614d87ee49",
+				"dweb:/ipfs/QmXPA8HVT2T449p3bmZYaPqEJgxHNNFXrz3zqFBfn9D7re"
+			]
+		},
+		"libraries/erc20.sol": {
+			"keccak256": "0x3b27826867857dc564ab39c2a8411d85709453af6564476d415df33277829d0c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://eb86161b75521c5c58771c7dd947939d6eda426efbb99cb61e107795da7f0641",
+				"dweb:/ipfs/QmfQCDcrgrWTucii99DciHXJNGwJsiJP9NoN17dhSSSETH"
+			]
+		},
+		"libraries/ownable.sol": {
+			"keccak256": "0x2ddbe12210096a4cdd886baa8abb601e0272b6b0165835c9b4dedfe06ee74edc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d9dbb65899c715b22da82a643d3792480feb01b0bafec4b3cd1685272e2aff15",
+				"dweb:/ipfs/QmTieB57T1PokeEeL4d5ttbeN1aNWiTNYLRbDVe8gD9na2"
+			]
+		}
+	},
+	"version": 1
+}

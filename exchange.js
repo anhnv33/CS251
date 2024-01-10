@@ -15,7 +15,7 @@ const token_symbol = 'HUST';               // TODO: replace with symbol for your
 //         ABIs and Contract Addresses: Paste Your ABIs/Addresses Here
 // =============================================================================
 // TODO: Paste your token contract address and ABI here:
-const token_address = '0xed97fE03B443901D1F880FAb00C2a50a8411aa51';                   
+const token_address = '0xd7BeC2CC9cfD015d8B5cECe4F9BD5844017e2c40';                   
 const token_abi = [
     {
         "anonymous": false,
@@ -521,7 +521,7 @@ const exchange_abi = [
         "type": "function"
     }
 ];
-const exchange_address = '0x4a801E0EfDD9973c892C904F1C3b7c4de31F1Bb0';                
+const exchange_address = '0x5F5ee5018B83fC87073b4b10910dc3bEd8bc675d';                
 const exchange_contract = new web3.eth.Contract(exchange_abi, exchange_address);
 
 
@@ -538,8 +538,14 @@ async function init() {
             && poolState['eth_liquidity'] === 0) {
         // Call mint twice to make sure mint can be called mutliple times prior to disable_mint
         const total_supply = 10000000000;
-		await token_contract.methods._mint(total_supply / 2).send({from:web3.eth.defaultAccount, gas : 999999});
-		await token_contract.methods._mint(total_supply / 2).send({from:web3.eth.defaultAccount, gas : 999999});
+		
+        try {
+            await token_contract.methods._mint(total_supply / 2).send({from:web3.eth.defaultAccount, gas : 999999});
+		    await token_contract.methods._mint(total_supply / 2).send({from:web3.eth.defaultAccount, gas : 999999});
+        } catch (err) {
+            console.log("Error calling mint: " + err);
+        }
+        
 		// await token_contract.methods._disable_mint().send({from:web3.eth.defaultAccount, gas : 999999});
         await token_contract.methods.approve(exchange_address, total_supply).send({from:web3.eth.defaultAccount});
         // initialize pool with equal amounts of ETH and tokens, so exchange rate begins as 1:1

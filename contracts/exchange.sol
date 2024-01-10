@@ -112,7 +112,7 @@ contract TokenExchange is Ownable {
      *
      * NOTE: You can change the inputs, or the scope of your function, as needed.
      */
-    function addLiquidity(uint256 token_amount) external payable {
+    function addLiquidity() external payable {
         /******* TODO: Implement this function *******/
         /* HINTS:
             Calculate the liquidity to be added based on what was sent in and the prices.
@@ -122,13 +122,14 @@ contract TokenExchange is Ownable {
         */
         // Ensure that both ETH and tokens are being added
         require(msg.value > 0, "Must provide ETH for liquidity");
-        require(token_amount > 0, "Must provide tokens for liquidity");
+        // require(token_amount > 0, "Must provide tokens for liquidity");
 
         // If it's not the first time liquidity is being added,
         // ensure the ratio of ETH to tokens is maintained.
-        if (token_reserves > 0 && eth_reserves > 0) {
-            require(token_reserves * msg.value == eth_reserves * token_amount, "Incorrect ETH to Token ratio");
-        }
+        // if (token_reserves > 0 && eth_reserves > 0) {
+        //     require(token_reserves * msg.value == eth_reserves * token_amount, "Incorrect ETH to Token ratio");
+        // }
+        uint256 token_amount = token_reserves * msg.value / eth_reserves;
 
         // Transfer the tokens from the sender to the contract
         require(token.transferFrom(msg.sender, address(this), token_amount),

@@ -282,13 +282,7 @@ const exchange_abi = [
         "type": "event"
     },
     {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "token_amount",
-                "type": "uint256"
-            }
-        ],
+        "inputs": [],
         "name": "addLiquidity",
         "outputs": [],
         "stateMutability": "payable",
@@ -582,18 +576,17 @@ function log(description, obj) {
 // Be sure to divide by 100 for your calculations.
 
 /*** ADD LIQUIDITY ***/
-async function addLiquidity(amountEth, amountToken, maxSlippagePct) {
+async function addLiquidity(amountEth, maxSlippagePct) {
     /** TODO: ADD YOUR CODE HERE **/
     // Convert amount from ETH to Wei
     const amountWei = web3.utils.toWei(amountEth.toString(), 'ether');
-    const amountTokenWei = web3.utils.toWei(amountToken.toString(), 'ether');
 
     // Calculate the maximum slippage amount
     // const maxSlippage = amountWei * (maxSlippagePct / 100);
 
     // Call the addLiquidity function from the smart contract
     try {
-        await exchange_contract.methods.addLiquidity(amountTokenWei).send({
+        await exchange_contract.methods.addLiquidity().send({
             from: web3.eth.defaultAccount,
             value: amountWei, // Send ETH along with the transaction
             gas: 999999

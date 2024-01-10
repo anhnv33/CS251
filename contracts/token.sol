@@ -20,7 +20,7 @@ contract HUSTToken is Ownable, IERC20 {
 
     uint256 private _totalSupply = 0;
 
-    mapping(address => uint) private _balances;   
+    mapping(address => uint256) private _balances;   
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
@@ -118,6 +118,26 @@ contract HUSTToken is Ownable, IERC20 {
         return _balances[owner];
     }
 
+    function uintToString(uint256 _i) internal pure returns (string memory) {
+        if (_i == 0) {
+            return "0";
+        }
+        uint256 j = _i;
+        uint256 length;
+        while (j != 0) {
+            length++;
+            j /= 10;
+        }
+        bytes memory bstr = new bytes(length);
+        uint256 k = length;
+        j = _i;
+        while (j != 0) {
+            bstr[--k] = bytes1(uint8(48 + j % 10));
+            j /= 10;
+        }
+        return string(bstr);
+    }
+
     /**
      * Transfers `amount` tokens from the caller's account to `recipient`.
      * 
@@ -136,7 +156,7 @@ contract HUSTToken is Ownable, IERC20 {
         returns (bool)
     {
         require(recipient != address(0), "ERC20: transfer to the zero address");
-        require(_balances[msg.sender] >= amount, "ERC20: transfer amount exceeds balance");
+        require(_balances[msg.sender] >= amount, uintToString(amount)); //"ERC20: transfer amount exceeds balance"
 
         _balances[msg.sender] -= amount;
         _balances[recipient] += amount;

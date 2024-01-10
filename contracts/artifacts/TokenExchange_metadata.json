@@ -329,11 +329,11 @@
 	},
 	"sources": {
 		"contracts/exchange.sol": {
-			"keccak256": "0x2d51131ee00873ced2f08cafc25870e2cff0a6bdb5c63eb3191d40a0e6d7882c",
+			"keccak256": "0x8f6ee3d1f3d07541e0ccf2b4f111a98d63dd1278cfb6194a53cc4aba1711682b",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://50ff03f1535521a724123b266756374b797d09e0927a0e0ba811f2c78a2b77e2",
-				"dweb:/ipfs/QmNpiVjkbNZdoeoHZMcB2BXBY64QqBoXKFeET2oiFStC75"
+				"bzz-raw://5817604f19cabb4f6c68aa18072daba69d8d713e224905ed7c4b1f5426a18529",
+				"dweb:/ipfs/QmUAgRbzgjVP95H41dkcrKUwnXCsmWnCfT2jD6QV8WuzHq"
 			]
 		},
 		"contracts/token.sol": {

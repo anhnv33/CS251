@@ -521,7 +521,7 @@ const exchange_abi = [
         "type": "function"
     }
 ];
-const exchange_address = '0x5F5ee5018B83fC87073b4b10910dc3bEd8bc675d';                
+const exchange_address = '0xb3bF06E2c3d7629EA7330aEDE17E7BbFd6e54881';                
 const exchange_contract = new web3.eth.Contract(exchange_abi, exchange_address);
 
 
@@ -582,31 +582,117 @@ function log(description, obj) {
 // Be sure to divide by 100 for your calculations.
 
 /*** ADD LIQUIDITY ***/
-async function addLiquidity(amountEth, maxSlippagePct) {
+async function addLiquidity(amountEth, amountToken, maxSlippagePct) {
     /** TODO: ADD YOUR CODE HERE **/
+    // Convert amount from ETH to Wei
+    const amountWei = web3.utils.toWei(amountEth.toString(), 'ether');
+    const amountTokenWei = web3.utils.toWei(amountToken.toString(), 'ether');
 
+    // Calculate the maximum slippage amount
+    // const maxSlippage = amountWei * (maxSlippagePct / 100);
+
+    // Call the addLiquidity function from the smart contract
+    try {
+        await exchange_contract.methods.addLiquidity(amountTokenWei).send({
+            from: web3.eth.defaultAccount,
+            value: amountWei, // Send ETH along with the transaction
+            gas: 999999
+        });
+    } catch (error) {
+        console.error("Error adding liquidity: ", error);
+    }
 }
 
 /*** REMOVE LIQUIDITY ***/
 async function removeLiquidity(amountEth, maxSlippagePct) {
     /** TODO: ADD YOUR CODE HERE **/
+    // Convert amount from ETH to Wei, as Ethereum transactions are done in Wei
+    const amountWei = web3.utils.toWei(amountEth.toString(), 'ether');
 
+    // Calculate the maximum slippage amount in Wei
+    // const maxSlippage = amountWei * (maxSlippagePct / 100);
+
+    // Call the removeLiquidity function from the smart contract
+    try {
+        const transaction = await exchange_contract.methods.removeLiquidity(amountWei).send({
+            from: web3.eth.defaultAccount,
+            gas: 999999 // You might want to adjust the gas limit based on your contract's requirements
+        });
+
+        // Additional code can go here to handle the response, like updating the UI
+    } catch (error) {
+        console.error("Error removing liquidity: ", error);
+        // Handle the error appropriately in your UI
+    }
 }
 
 async function removeAllLiquidity(maxSlippagePct) {
     /** TODO: ADD YOUR CODE HERE **/
+    try {
+        const transaction = await exchange_contract.methods.removeAllLiquidity().send({
+            from: web3.eth.defaultAccount,
+            gas: 999999 // Adjust gas limit based on contract requirements
+        });
 
+        // Additional code can go here to handle the response, such as updating the UI
+    } catch (error) {
+        console.error("Error removing all liquidity: ", error);
+        // Handle the error appropriately in your UI
+    }
 }
 
 /*** SWAP ***/
 async function swapTokensForETH(amountToken, maxSlippagePct) {
     /** TODO: ADD YOUR CODE HERE **/
+    // Convert token amount to Wei (if your token also uses 18 decimal places)
+    const amountTokenWei = web3.utils.toWei(amountToken.toString(), 'ether');
 
+    // Calculate the minimum amount of ETH you are willing to receive after slippage
+    // const ethAmountAfterSlippage = await exchange_contract.methods.getEthAmountForTokenSwap(amountTokenWei).call();
+    // const minEthAmount = ethAmountAfterSlippage * (1 - maxSlippagePct / 100);
+
+    // Approve the exchange to spend tokens
+    await token_contract.methods.approve(exchange_address, amountTokenWei).send({
+        from: web3.eth.defaultAccount,
+        gas: 999999 // Adjust gas limit as needed
+    });
+
+    // Call the swapTokensForETH function from the smart contract
+    try {
+        await exchange_contract.methods.swapTokensForETH(amountTokenWei).send({
+            from: web3.eth.defaultAccount,
+            gas: 999999 // Again, adjust the gas limit as needed
+        });
+        // You can add code here to handle a successful transaction
+    } catch (error) {
+        console.error("Error swapping tokens for ETH: ", error);
+        // Handle the error appropriately in your UI
+    }
 }
 
 async function swapETHForTokens(amountETH, maxSlippagePct) {
     /** TODO: ADD YOUR CODE HERE **/
+    // Convert the amount from ETH to Wei
+    const amountWei = web3.utils.toWei(amountETH.toString(), 'ether');
 
+    // Calculate the expected token amount for the given ETH
+    // const expectedTokenAmount = await exchange_contract.methods.getTokenAmountForEthSwap(amountWei).call();
+    
+    // Apply the maximum slippage to calculate the minimum acceptable token amount
+    // const minTokenAmount = expectedTokenAmount * (1 - maxSlippagePct / 100);
+
+    // Call the swapETHForTokens function from the smart contract
+    try {
+        await exchange_contract.methods.swapETHForTokens().send({
+            from: web3.eth.defaultAccount,
+            value: amountWei, // Amount of ETH to swap
+            gas: 999999 // Adjust the gas limit as needed
+        });
+        // Code to handle successful transaction can go here
+    } catch (error) {
+        console.error("Error swapping ETH for tokens: ", error);
+        // Handle the error appropriately in your UI
+    }
 }
 
 // =============================================================================

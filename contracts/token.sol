@@ -18,7 +18,7 @@ contract HUSTToken is Ownable, IERC20 {
     string private constant symbol = 'HUST';                 // TODO: Give your token a symbol
     string private constant name = 'HUSTToken';                   // TODO: Give your token a name
 
-    uint private _totalSupply = 0;
+    uint256 private _totalSupply = 0;
 
     mapping(address => uint) private _balances;   
 
@@ -58,8 +58,10 @@ contract HUSTToken is Ownable, IERC20 {
         require(msg.sender != address(0), "ERC20: mint to the zero address");
         require(minting_disabled == false, "Minting is disabled");
 
-        _totalSupply += amount / 10 ** decimals();
-        _balances[msg.sender] += amount / 10 ** decimals();
+        // _totalSupply += amount / 10 ** decimals();
+        // _balances[msg.sender] += amount / 10 ** decimals();
+        _totalSupply += amount;
+        _balances[msg.sender] += amount;
         emit Transfer(address(0), msg.sender, amount);
         
     }

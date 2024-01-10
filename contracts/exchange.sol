@@ -7,9 +7,9 @@ pragma solidity ^0.8.0;
 import "../interfaces/IERC20.sol";
 import "./token.sol";
 import "../libraries/ownable.sol";
-import "@openzeppelin/contracts/math/SafeMath.sol";
+// import "@openzeppelin/contracts/math/SafeMath.sol";
 
-using SafeMath for uint256;
+
 
 /* This exchange is based off of Uniswap V1. The original whitepaper for the constant product rule
  * can be found here:
@@ -17,9 +17,10 @@ using SafeMath for uint256;
  */
 
 contract TokenExchange is Ownable {
+    // using SafeMath for uint256;
     address public admin;
 
-    address tokenAddr = 0x6fd36D7C9d036Aa5Ab61890dB1E55C1E7554A546; // TODO: Paste token contract address here.
+    address tokenAddr = 0xed97fE03B443901D1F880FAb00C2a50a8411aa51; // TODO: Paste token contract address here.
     HUSTToken private token = HUSTToken(tokenAddr); // TODO: Replace "Token" with your token class.
 
     // Liquidity pool for the exchange
@@ -125,9 +126,8 @@ contract TokenExchange is Ownable {
 
         // If it's not the first time liquidity is being added,
         // ensure the ratio of ETH to tokens is maintained.
-        if(token_reserves > 0 && eth_reserves > 0) {
-            require(token_reserves.mul(msg.value) == eth_reserves.mul(token_amount),
-                    "Incorrect ETH to Token ratio");
+        if (token_reserves > 0 && eth_reserves > 0) {
+            require(token_reserves * msg.value == eth_reserves * token_amount, "Incorrect ETH to Token ratio");
         }
 
         // Transfer the tokens from the sender to the contract
@@ -135,14 +135,15 @@ contract TokenExchange is Ownable {
                 "Token transfer failed");
 
         // Update the reserves
-        token_reserves = token_reserves.add(token_amount);
-        eth_reserves = eth_reserves.add(msg.value);
+        token_reserves += token_amount;
+        eth_reserves += msg.value;
+        k = token_reserves * eth_reserves;
 
         // Update the constant product
-        k = token_reserves.mul(eth_reserves);
+        k = token_reserves * eth_reserves;
 
         // Update the user's liquidity contribution
-        userLiquidity[msg.sender] = userLiquidity[msg.sender].add(msg.value);
+        userLiquidity[msg.sender] += msg.value;
 
         // Emit the liquidity event
         emit AddLiquidity(msg.sender, token_amount);
@@ -172,25 +173,25 @@ contract TokenExchange is Ownable {
 
         // Calculate the amount of tokens to be removed based on the ETH amount
         // This is derived from the constant product formula
-        uint256 token_amount = eth_amount.mul(token_reserves) / eth_reserves;
+        uint256 token_amount = (eth_amount * token_reserves) / eth_reserves;
 
         // Check if the pool has enough liquidity to honor the removal
         require(eth_reserves >= eth_amount, "Insufficient ETH in reserves");
         require(token_reserves >= token_amount, "Insufficient tokens in reserves");
 
         // Update the reserves
-        eth_reserves = eth_reserves.sub(eth_amount);
-        token_reserves = token_reserves.sub(token_amount);
+        eth_reserves -= eth_amount;
+        token_reserves -= token_amount;
 
         // Update the constant product
-        k = token_reserves.mul(eth_reserves);
+        k = token_reserves * eth_reserves;
 
         // Transfer ETH and tokens back to the liquidity provider
         payable(msg.sender).transfer(eth_amount);
         require(token.transfer(msg.sender, token_amount), "Token transfer failed");
 
         // Update the user's liquidity contribution
-        userLiquidity[msg.sender] = userLiquidity[msg.sender].sub(eth_amount);
+        userLiquidity[msg.sender] -= eth_amount;
 
         // Emit the liquidity removal event
         emit RemoveLiquidity(msg.sender, eth_amount);
@@ -218,19 +219,19 @@ contract TokenExchange is Ownable {
 
         // Calculate the user's share of the total liquidity pool
         // This is the ratio of the user's ETH contribution to the total ETH reserves
-        uint256 userShare = userEthContribution.mul(1e18).div(eth_reserves); // 1e18 for precision
+        uint256 userShare = userEthContribution * 1e18 / eth_reserves; // 1e18 for precision
 
         // Calculate the amount of tokens corresponding to the user's share
-        uint256 tokenAmount = token_reserves.mul(userShare).div(1e18); // Adjust back after multiplying for precision
+        uint256 tokenAmount = token_reserves * userShare / 1e18;  // Adjust back after multiplying for precision
 
         // Check if the pool has enough liquidity to honor the withdrawal
         require(eth_reserves >= userEthContribution, "Insufficient ETH in reserves");
         require(token_reserves >= tokenAmount, "Insufficient tokens in reserves");
 
         // Update the reserves and constant product k
-        eth_reserves = eth_reserves.sub(userEthContribution);
-        token_reserves = token_reserves.sub(tokenAmount);
-        k = token_reserves.mul(eth_reserves);
+        eth_reserves -= userEthContribution;
+        token_reserves -= tokenAmount;
+        k = token_reserves * eth_reserves;
 
         // Update the user's liquidity contribution to zero
         userLiquidity[msg.sender] = 0;
@@ -295,8 +296,8 @@ contract TokenExchange is Ownable {
         require(token.transferFrom(msg.sender, address(this), amountTokens), "Token transfer failed");
 
         // Update the reserves
-        token_reserves = token_reserves.add(amountTokens);
-        eth_reserves = eth_reserves.sub(ethAmount);
+        token_reserves += amountTokens;
+        eth_reserves -= ethAmount;
 
         // Send ETH to the user
         payable(msg.sender).transfer(ethAmount);
@@ -351,8 +352,8 @@ contract TokenExchange is Ownable {
         require(tokenAmount <= token_reserves, "Insufficient tokens in reserves");
 
         // Update the reserves
-        eth_reserves = eth_reserves.add(ethAmount);
-        token_reserves = token_reserves.sub(tokenAmount);
+        eth_reserves += ethAmount;
+        token_reserves -= tokenAmount;
 
         // Transfer tokens to the user
         require(token.transfer(msg.sender, tokenAmount), "Token transfer failed");
@@ -367,17 +368,17 @@ contract TokenExchange is Ownable {
         require(token_reserves > 0 && eth_reserves > 0, "Reserves are empty");
 
         // Calculate the new ETH reserves after the swap
-        uint256 newEthReserves = eth_reserves.add(ethAmount);
+        uint256 newEthReserves = eth_reserves + ethAmount;
 
         // Use the constant product formula to find the new token reserves
         // newTokenReserves * newEthReserves = k
-        uint256 newTokenReserves = k.div(newEthReserves);
+        uint256 newTokenReserves = k / newEthReserves;
 
         // Ensure the new reserves are less than the current (indicating a valid swap)
         require(newTokenReserves < token_reserves, "Invalid swap");
 
         // The tokens to be received is the difference between the current and new token reserves
-        uint256 tokensReceived = token_reserves.sub(newTokenReserves);
+        uint256 tokensReceived = token_reserves - newTokenReserves;
 
         return tokensReceived;
     }
@@ -387,17 +388,17 @@ contract TokenExchange is Ownable {
         require(token_reserves > 0 && eth_reserves > 0, "Reserves are empty");
 
         // Calculate the new token reserves after the swap
-        uint256 newTokenReserves = token_reserves.add(amountTokens);
+        uint256 newTokenReserves = token_reserves + amountTokens;
 
         // Use the constant product formula to find the new ETH reserves
         // newTokenReserves * newEthReserves = k
-        uint256 newEthReserves = k.div(newTokenReserves);
+        uint256 newEthReserves = k / newTokenReserves;
 
         // Ensure the new reserves are less than the current (indicating a valid swap)
         require(newEthReserves < eth_reserves, "Invalid swap");
 
         // The ETH to be received is the difference between the current and new ETH reserves
-        uint256 ethReceived = eth_reserves.sub(newEthReserves);
+        uint256 ethReceived = eth_reserves - newEthReserves;
 
         return ethReceived;
     }
@@ -426,12 +427,13 @@ contract TokenExchange is Ownable {
     // TODO Part 4: Implement this function
 
     function priceToken() public view returns (uint) {
-        return token_reserves.div(eth_reserves);
+        require(token_reserves > 0, "No tokens in reserves");
+        return token_reserves / eth_reserves;
     }
 
     function priceETH() public view returns (uint) {
-        return eth_reserves.div(token_reserves);
+        require(eth_reserves > 0, "No ETH in reserves");
+        return eth_reserves / token_reserves;
     }
-
 
 }

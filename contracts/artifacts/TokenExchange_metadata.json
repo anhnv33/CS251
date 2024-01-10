@@ -49,7 +49,13 @@
 				"type": "event"
 			},
 			{
-				"inputs": [],
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "token_amount",
+						"type": "uint256"
+					}
+				],
 				"name": "addLiquidity",
 				"outputs": [],
 				"stateMutability": "payable",
@@ -133,8 +139,72 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountTokens",
+						"type": "uint256"
+					}
+				],
+				"name": "getEthAmountForTokenSwap",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "ethAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "getTokenAmountForEthSwap",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "k",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "priceETH",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "priceToken",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -156,7 +226,7 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "amountETH",
+						"name": "eth_amount",
 						"type": "uint256"
 					}
 				],
@@ -197,6 +267,25 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "userLiquidity",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -207,11 +296,11 @@
 		"userdoc": {
 			"kind": "user",
 			"methods": {
-				"addLiquidity()": {
+				"addLiquidity(uint256)": {
 					"notice": "Adds liquidity given a supply of ETH (sent to the contract as msg.value). Calculates the liquidity to be added based on what was sent in and the prices. If the caller possesses insufficient tokens to equal the ETH sent, then the transaction must fail. A successful transaction should update the state of the contract, including the new constant product k, and then Emit an AddLiquidity event. NOTE: You can change the inputs, or the scope of your function, as needed."
 				},
 				"createPool(uint256)": {
-					"notice": "Initializes a liquidity pool between your token and ETH.  This is a payable function which means you can send in ETH as a quasi-parameter. In this case, the amount of eth sent to the pool will be in msg.value and the number of tokens will be amountTokens. Requirements:  - the liquidity pool should be empty to start  - the sender should send positive values for each"
+					"notice": "Initializes a liquidity pool between your token and ETH. This is a payable function which means you can send in ETH as a quasi-parameter. In this case, the amount of eth sent to the pool will be in msg.value and the number of tokens will be amountTokens. Requirements:  - the liquidity pool should be empty to start  - the sender should send positive values for each"
 				},
 				"removeAllLiquidity()": {
 					"notice": "Removes all liquidity that the sender is entitled to withdraw. Calculate the maximum amount of liquidity that the sender is entitled to withdraw and then calls removeLiquidity() to remove that amount of liquidity from the pool. NOTE: You can change the inputs, or the scope of your function, as needed."
@@ -246,11 +335,11 @@
 	},
 	"sources": {
 		"contracts/exchange.sol": {
-			"keccak256": "0xed1183120d0be067ceb8bdeea3e9fc241c6534085ca369ffff8273b4d431b003",
+			"keccak256": "0xe4f70b6d47271fe9ffdc0a5751ca7a78c716726fc71e2535544fc9d28f964197",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://c5e185baaa2fd91327dbcdd25a877b336af76aa55519da374efaefbffd4d7e83",
-				"dweb:/ipfs/QmWtXhPAG8Cc6h8bzXFgrVCDUus7dR2EAFgD8QVqp4BzsU"
+				"bzz-raw://db9ef607ada9b5912ef2fc85345651dd9cd28051584c0ba7b482425d5ead961d",
+				"dweb:/ipfs/QmVX9nRksboXb9fkGqYj5ZB5kQnJS2qNBrbJG2HviJn9Bi"
 			]
 		},
 		"contracts/token.sol": {

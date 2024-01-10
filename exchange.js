@@ -15,7 +15,7 @@ const token_symbol = 'HUST';               // TODO: replace with symbol for your
 //         ABIs and Contract Addresses: Paste Your ABIs/Addresses Here
 // =============================================================================
 // TODO: Paste your token contract address and ABI here:
-const token_address = '0xAefFC2E81331B35cEC904488d7b81C4052d83CF3';                   
+const token_address = '0xed97fE03B443901D1F880FAb00C2a50a8411aa51';                   
 const token_abi = [
     {
         "anonymous": false,
@@ -282,7 +282,13 @@ const exchange_abi = [
         "type": "event"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "token_amount",
+                "type": "uint256"
+            }
+        ],
         "name": "addLiquidity",
         "outputs": [],
         "stateMutability": "payable",
@@ -366,8 +372,72 @@ const exchange_abi = [
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "amountTokens",
+                "type": "uint256"
+            }
+        ],
+        "name": "getEthAmountForTokenSwap",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "ethAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "getTokenAmountForEthSwap",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "k",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "priceETH",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "priceToken",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -389,7 +459,7 @@ const exchange_abi = [
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "amountETH",
+                "name": "eth_amount",
                 "type": "uint256"
             }
         ],
@@ -430,9 +500,28 @@ const exchange_abi = [
         ],
         "stateMutability": "view",
         "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "userLiquidity",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
     }
 ];
-const exchange_address = '0xa138ccfe55B4E905FcCAC70363b1E57c1E0085d5';                
+const exchange_address = '0x4a801E0EfDD9973c892C904F1C3b7c4de31F1Bb0';                
 const exchange_contract = new web3.eth.Contract(exchange_abi, exchange_address);
 
 
@@ -451,7 +540,7 @@ async function init() {
         const total_supply = 10000000000;
 		await token_contract.methods._mint(total_supply / 2).send({from:web3.eth.defaultAccount, gas : 999999});
 		await token_contract.methods._mint(total_supply / 2).send({from:web3.eth.defaultAccount, gas : 999999});
-		await token_contract.methods._disable_mint().send({from:web3.eth.defaultAccount, gas : 999999});
+		// await token_contract.methods._disable_mint().send({from:web3.eth.defaultAccount, gas : 999999});
         await token_contract.methods.approve(exchange_address, total_supply).send({from:web3.eth.defaultAccount});
         // initialize pool with equal amounts of ETH and tokens, so exchange rate begins as 1:1
         await exchange_contract.methods.createPool(total_supply).send({from:web3.eth.defaultAccount, value : total_supply, gas : 999999});

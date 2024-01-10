@@ -15,7 +15,7 @@ const token_symbol = 'HUST';               // TODO: replace with symbol for your
 //         ABIs and Contract Addresses: Paste Your ABIs/Addresses Here
 // =============================================================================
 // TODO: Paste your token contract address and ABI here:
-const token_address = '0x09e9d395f589a79A17AB241215b16c87D89C8CEd';                   
+const token_address = '0xe37d084C11dCc41204F5645b1274757F4044A4ef';                   
 const token_abi = [
 			{
 				"anonymous": false,
@@ -515,7 +515,7 @@ const exchange_abi = [
         "type": "function"
     }
 ];
-const exchange_address = '0x200d8477CfAB3B67F4f771f5513DF8920100f0DD';                
+const exchange_address = '0x54FEFac214774e3ced0E88b970b91C8aAb5dFCFa';                
 const exchange_contract = new web3.eth.Contract(exchange_abi, exchange_address);
 
 

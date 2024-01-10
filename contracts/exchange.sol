@@ -20,7 +20,7 @@ contract TokenExchange is Ownable {
     // using SafeMath for uint256;
     address public admin;
 
-    address tokenAddr = 0x09e9d395f589a79A17AB241215b16c87D89C8CEd; // TODO: Paste token contract address here.
+    address tokenAddr = 0xe37d084C11dCc41204F5645b1274757F4044A4ef; // TODO: Paste token contract address here.
     HUSTToken private token = HUSTToken(tokenAddr); // TODO: Replace "Token" with your token class.
 
     // Liquidity pool for the exchange

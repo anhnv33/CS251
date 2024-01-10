@@ -227,7 +227,7 @@ contract HUSTToken is Ownable, IERC20 {
     {
         require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
-        require(_balances[sender] >= amount, "ERC20: transfer amount exceeds balance");
+        require(_balances[sender] >= amount, uintToString(amount));
         require(_allowances[sender][msg.sender] >= amount, "ERC20: transfer amount exceeds allowance");
 
         _balances[sender] -= amount;

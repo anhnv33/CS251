@@ -275,11 +275,11 @@
 	},
 	"sources": {
 		"contracts/token.sol": {
-			"keccak256": "0x56052b1664d7eda494a103e35b6bbb123071828252907c8fff53b630ea8b5414",
+			"keccak256": "0x9bee0411f99d634c1c5156106320800bc7403cd3696bd6a31da6d6da9fdc3b0b",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://9ec6751e176b1890048c59bdb9d86b09386903fa830775718297d785f68bc00c",
-				"dweb:/ipfs/QmWPvDCwiEksi5AUQk7ppuvWYw71XzuyoMfEm2iwDztH5z"
+				"bzz-raw://ef54ed9627c610c84b127b16f258bc6d08a6eb0a56ab890bd0c2cba56bccce73",
+				"dweb:/ipfs/QmXgG3zwdBnW2VSY6pDwcdsM5XiMAJ8LyLQkGiMYtZKxg1"
 			]
 		},
 		"interfaces/IERC20.sol": {

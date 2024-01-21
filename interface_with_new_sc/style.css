@@ -17,7 +17,7 @@ body {
 .panel {
 	position: absolute;
 	top: 20px;
-	width: 330px;
+	width: 325px;
 	background-color: #CCC;
 	padding: 20px;
 }
@@ -32,7 +32,7 @@ body {
 }
 .wallet_addresses_panel {
 	position: absolute;
-	width: 300px;
+	width: 330px;
 	height: 160px;
 	background-color: #CCC;
 	padding: 20px;

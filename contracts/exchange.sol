@@ -66,12 +66,12 @@ contract TokenExchange is Ownable {
         require(amountTokens > 0, "Need tokens to create pool.");
 
         token.transferFrom(msg.sender, address(this), amountTokens);
-        eth_reserves = msg.value;
+        eth_reserves = msg.value / 1e18;
         token_reserves = amountTokens;
         k = eth_reserves * token_reserves;
 
         // Update the user's liquidity contribution
-        userLiquidity[msg.sender] = msg.value;
+        userLiquidity[msg.sender] = msg.value / 1e18;
     }
 
     // ============================================================
@@ -129,7 +129,8 @@ contract TokenExchange is Ownable {
         // if (token_reserves > 0 && eth_reserves > 0) {
         //     require(token_reserves * msg.value == eth_reserves * token_amount, "Incorrect ETH to Token ratio");
         // }
-        uint256 token_amount = token_reserves * msg.value / eth_reserves;
+        uint256 eth_amount = msg.value / 1e18;
+        uint256 token_amount = token_reserves * eth_amount / eth_reserves;
 
         // Transfer the tokens from the sender to the contract
         require(token.transferFrom(msg.sender, address(this), token_amount),
@@ -137,7 +138,7 @@ contract TokenExchange is Ownable {
 
         // Update the reserves
         token_reserves += token_amount;
-        eth_reserves += msg.value;
+        eth_reserves += eth_amount;
         k = token_reserves * eth_reserves;
 
         // Update the constant product
@@ -220,10 +221,10 @@ contract TokenExchange is Ownable {
 
         // Calculate the user's share of the total liquidity pool
         // This is the ratio of the user's ETH contribution to the total ETH reserves
-        uint256 userShare = userEthContribution * 1e18 / eth_reserves; // 1e18 for precision
+        uint256 userShare = userEthContribution / eth_reserves; // 1e18 for precision
 
         // Calculate the amount of tokens corresponding to the user's share
-        uint256 tokenAmount = token_reserves * userShare / 1e18;  // Adjust back after multiplying for precision
+        uint256 tokenAmount = token_reserves * userShare;  // Adjust back after multiplying for precision
 
         // Check if the pool has enough liquidity to honor the withdrawal
         require(eth_reserves >= userEthContribution, "Insufficient ETH in reserves");

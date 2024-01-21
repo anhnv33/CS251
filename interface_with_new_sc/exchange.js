@@ -1,13 +1,13 @@
 // =================== CS251 DEX Project =================== // 
 //        @authors: Simon Tao '22, Mathew Hogan '22          //
-// ========================================================= //                  
+// ========================================================= // 
 
 // sets up web3.js
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
 
 const exchange_name = 'HUST AMM'; // TODO: fill in the name of your exchange
 
-const token_name = 'HUSTToken';             // TODO: replace with name of your token
+const token_name = 'HUST';             // TODO: replace with name of your token
 const token_symbol = 'HUST';               // TODO: replace with symbol for your token
 
 
@@ -16,7 +16,30 @@ const token_symbol = 'HUST';               // TODO: replace with symbol for your
 // =============================================================================
 // TODO: Paste your token contract address and ABI here:
 const token_address = '0xd9145CCE52D386f254917e481eB44e9943F39138';
+
+//read token_abi from token.json file
 const token_abi = [
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "symbol",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "initialSupply",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
     {
         "anonymous": false,
         "inputs": [
@@ -66,26 +89,6 @@ const token_abi = [
         ],
         "name": "Transfer",
         "type": "event"
-    },
-    {
-        "inputs": [],
-        "name": "_disable_mint",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "_mint",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
     },
     {
         "inputs": [
@@ -139,7 +142,7 @@ const token_abi = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "owner",
+                "name": "account",
                 "type": "address"
             }
         ],
@@ -162,6 +165,80 @@ const token_abi = [
                 "internalType": "uint8",
                 "name": "",
                 "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "subtractedValue",
+                "type": "uint256"
+            }
+        ],
+        "name": "decreaseAllowance",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "addedValue",
+                "type": "uint256"
+            }
+        ],
+        "name": "increaseAllowance",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "name",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
             }
         ],
         "stateMutability": "view",
@@ -234,6 +311,7 @@ const token_abi = [
         "type": "function"
     }
 ];
+
 const token_contract = new web3.eth.Contract(token_abi, token_address);
 
 // TODO: Paste your exchange address and ABI here
@@ -248,92 +326,6 @@ const exchange_abi = [
         ],
         "stateMutability": "nonpayable",
         "type": "constructor"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "spender",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "allowance",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "needed",
-                "type": "uint256"
-            }
-        ],
-        "name": "ERC20InsufficientAllowance",
-        "type": "error"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "sender",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "balance",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "needed",
-                "type": "uint256"
-            }
-        ],
-        "name": "ERC20InsufficientBalance",
-        "type": "error"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "approver",
-                "type": "address"
-            }
-        ],
-        "name": "ERC20InvalidApprover",
-        "type": "error"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "receiver",
-                "type": "address"
-            }
-        ],
-        "name": "ERC20InvalidReceiver",
-        "type": "error"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "sender",
-                "type": "address"
-            }
-        ],
-        "name": "ERC20InvalidSender",
-        "type": "error"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "spender",
-                "type": "address"
-            }
-        ],
-        "name": "ERC20InvalidSpender",
-        "type": "error"
     },
     {
         "anonymous": false,
@@ -437,7 +429,7 @@ const exchange_abi = [
             },
             {
                 "internalType": "uint256",
-                "name": "value",
+                "name": "amount",
                 "type": "uint256"
             }
         ],
@@ -487,6 +479,30 @@ const exchange_abi = [
     {
         "inputs": [
             {
+                "internalType": "address",
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "subtractedValue",
+                "type": "uint256"
+            }
+        ],
+        "name": "decreaseAllowance",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint256",
                 "name": "_minTokens",
                 "type": "uint256"
@@ -513,6 +529,32 @@ const exchange_abi = [
         "name": "ethToTokenTransfer",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "factoryAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getETHReserve",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -564,6 +606,30 @@ const exchange_abi = [
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "addedValue",
+                "type": "uint256"
+            }
+        ],
+        "name": "increaseAllowance",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -658,6 +724,11 @@ const exchange_abi = [
                 "internalType": "uint256",
                 "name": "_minTokensBought",
                 "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_tokenAddress",
+                "type": "address"
             }
         ],
         "name": "tokenToTokenSwap",
@@ -682,12 +753,12 @@ const exchange_abi = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "to",
+                "name": "recipient",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "value",
+                "name": "amount",
                 "type": "uint256"
             }
         ],
@@ -706,17 +777,17 @@ const exchange_abi = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "from",
+                "name": "sender",
                 "type": "address"
             },
             {
                 "internalType": "address",
-                "name": "to",
+                "name": "recipient",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "value",
+                "name": "amount",
                 "type": "uint256"
             }
         ],
@@ -732,7 +803,7 @@ const exchange_abi = [
         "type": "function"
     }
 ];
-const exchange_address = '0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8';
+const exchange_address = '0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B';
 const exchange_contract = new web3.eth.Contract(exchange_abi, exchange_address);
 
 
@@ -769,7 +840,7 @@ async function init() {
 async function getPoolState() {
     // read pool balance for each type of liquidity
     let liquidity_tokens = await exchange_contract.methods.getReserve().call({ from: web3.eth.defaultAccount });
-    let liquidity_eth = await exchange_contract.methods.eth_reserves().call({ from: web3.eth.defaultAccount });
+    let liquidity_eth = await exchange_contract.methods.getETHReserve().call({ from: web3.eth.defaultAccount });
     let total_supply = await token_contract.methods.totalSupply().call({ from: web3.eth.defaultAccount });
     let current_balance = await token_contract.methods.balanceOf(web3.eth.defaultAccount).call({ from: web3.eth.defaultAccount });
     return {
